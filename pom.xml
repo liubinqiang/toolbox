@@ -5,12 +5,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.machinetest</groupId>
-    <artifactId>parent</artifactId>
+    <artifactId>machinetest</artifactId>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>machinetest-common</module>
+        <module>machinetest-demo</module>
+        <module>machinetest-program-tool</module>
     </modules>
-
-
 </project>
