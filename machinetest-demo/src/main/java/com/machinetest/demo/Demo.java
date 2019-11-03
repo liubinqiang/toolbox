@@ -1,17 +1,13 @@
 package com.machinetest.demo;
 
-import com.machinetest.common.util.Cmd;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
+import java.util.Date;
 
 /**
  * @author liubinqiang
  */
 public class Demo {
     public static void main(String[] args) {
-        String result = Cmd.run("wmic cpu list brief");
-        System.out.println(result);
+        Date date = new Date(0);
+        System.out.println(date);
     }
 }

@@ -1,5 +1,7 @@
 package com.machinetest.common.util;
 
+import com.machinetest.common.bean.CmdStr;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -17,7 +19,10 @@ public class Cmd {
             BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
             String temp = null;
             while ((temp = reader.readLine()) != null) {
-                result = result + temp + "<br/>";
+                result = result + temp + CmdStr.SEPARATOR;
+            }
+            if (result.length() > CmdStr.SEPARATOR.length()) {
+                result = result.substring(0, result.length() - CmdStr.SEPARATOR.length());
             }
         } catch (IOException e) {
             e.printStackTrace();

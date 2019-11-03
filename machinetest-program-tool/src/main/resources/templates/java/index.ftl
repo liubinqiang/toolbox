@@ -5,13 +5,15 @@
 <body>
 <#include "../link.ftl">
 <div>
-    <h4>服务器信息</h4>
+    <h5>服务器信息</h5>
     <table class="table table-bordered">
         <thead>
         <tr>
             <td>操作系统</td>
             <td>CPU信息</td>
             <td>内存信息</td>
+            <td>启动时间</td>
+            <td>当前时间</td>
         </tr>
         </thead>
         <tbody>
@@ -19,7 +21,46 @@
             <td>${serverInfo.systemInfo}</td>
             <td>${serverInfo.cpuInfo}</td>
             <td>${serverInfo.memInfo}</td>
+            <td>${serverInfo.systemStartDateTime}</td>
+            <td>${serverInfo.systemDateTime}</td>
         </tr>
+        </tbody>
+    </table>
+</div>
+<div>
+    <h5>Java服务信息</h5>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <td>用户</td>
+            <td>pid</td>
+            <td>名称</td>
+            <td>CPU</td>
+            <td>物理内存</td>
+            <td>虚拟内存</td>
+            <td>固定内存</td>
+            <td>状态</td>
+            <td>使用CPU运作的时间</td>
+            <td>启动时间</td>
+            <td>运行时长</td>
+        </tr>
+        </thead>
+        <tbody>
+        <#list ps as p>
+            <tr>
+                <td>${p.user}</td>
+                <td>${p.pid}</td>
+                <td>${p.command}</td>
+                <td>${p.cpu}</td>
+                <td>${p.mem}</td>
+                <td>${p.vsz}</td>
+                <td>${p.rss}</td>
+                <td>${p.stat}</td>
+                <td>${p.time}</td>
+                <td>${p.startTime}</td>
+                <td>${p.liveTime}</td>
+            </tr>
+        </#list>
         </tbody>
     </table>
 </div>

@@ -24,4 +24,6 @@ public class ServerInfoBean {
     private String cpuInfo;
     private String memInfo;
 
+    private String systemDateTime;
+    private String systemStartDateTime;
 }
