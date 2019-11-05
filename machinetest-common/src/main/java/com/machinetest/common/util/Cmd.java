@@ -11,21 +11,17 @@ import java.io.InputStreamReader;
  */
 public class Cmd {
 
-    public static String run(String cmd) {
+    public static String run(String cmd) throws IOException {
         String result = "";
-        try {
-            String[] cmds = {"/bin/sh", "-c", cmd};
-            Process p = Runtime.getRuntime().exec(cmds);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
-            String temp = null;
-            while ((temp = reader.readLine()) != null) {
-                result = result + temp + CmdStr.SEPARATOR;
-            }
-            if (result.length() > CmdStr.SEPARATOR.length()) {
-                result = result.substring(0, result.length() - CmdStr.SEPARATOR.length());
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        String[] cmds = {"/bin/sh", "-c", cmd};
+        Process p = Runtime.getRuntime().exec(cmds);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
+        String temp = null;
+        while ((temp = reader.readLine()) != null) {
+            result = result + temp + CmdStr.SEPARATOR;
+        }
+        if (result.length() > CmdStr.SEPARATOR.length()) {
+            result = result.substring(0, result.length() - CmdStr.SEPARATOR.length());
         }
         return result;
     }

@@ -3,12 +3,21 @@
 <configuration scan="true" scanPeriod="10 seconds">
     <!--    该配置会向/tmp/spring.log打印日志，需要注释掉，换成下面的defaults.xml-->
     <!--<include resource="org/springframework/boot/logging/logback/base.xml" />-->
-    <include resource="org/springframework/boot/logging/logback/defaults.xml" />
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
     <logger name="org.springframework.web" level="INFO"/>
-    
-    <property name="LOG_PATH" value="logs" />
-    
+
+    <property name="LOG_PATH" value="logs"/>
     <property name="FILE_LOG_PATTERN" value="%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"/>
+
+    <!--邮件-->       
+    <property name="smtpHost" value="smtp.126.com"/>
+    <property name="username" value="abcd@126.com"/>
+    <property name="password" value="abcd"/>
+    <property name="email_to" value="abcd"/>
+    <property name="SSL" value="true"/>
+    <property name="email_subject" value="错误日志"/>
+    <contextName>${HOSTNAME}</contextName>
+
 
     <appender name="INFO_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <File>${LOG_PATH}/info.log</File>
@@ -41,7 +50,7 @@
             </Pattern>
         </layout>
     </appender>
-    
+
     <!--STDOUT 标准输出 在开发过程中最常用的是将日志输出到控制台-->
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
@@ -62,18 +71,34 @@
             <!-- daily rollover -->
             <FileNamePattern>rest-demo.%d{yyyy-MM-dd}.log</FileNamePattern>
             <!-- keep 30 days' worth of history -->
-            <maxHistory>3650</maxHistory>         
+            <maxHistory>3650</maxHistory>
         </rollingPolicy>
         <encoder>
             <Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{35} - %msg %n</Pattern>
-        </encoder>        
+        </encoder>
+    </appender>
+
+    <appender name="EMAIL" class="ch.qos.logback.classic.net.SMTPAppender">
+        <smtpHost>${smtpHost}</smtpHost>
+        <Username>${username}</Username>
+        <Password>${password}</Password>
+        <localhost>${localhost}</localhost>
+        <SSL>${SSL}</SSL>
+        <to>${email_to}</to>
+        <from>${username}</from>
+        <subject>${email_subject}</subject>
+        <asynchronousSending>true</asynchronousSending>
+        <layout class="ch.qos.logback.classic.html.HTMLLayout">
+            <pattern>%date%contextName%level%thread%logger{0}%line%message</pattern>
+        </layout>
     </appender>
 
     <root level="INFO">
-        <appender-ref ref="INFO_FILE" />
+        <appender-ref ref="INFO_FILE"/>
+        <appender-ref ref="EMAIL"/>
         <!-- <appender-ref ref="ERROR_FILE" />
         <appender-ref ref="STDOUT" />
         <appender-ref ref="LOG-DEBUG" />-->
     </root>
-    
+
 </configuration>

@@ -18,7 +18,7 @@ import java.util.*;
  * @author liubinqiang
  */
 @Service
-public class JavaServiceImpl implements IJavaService {
+public class JavaServiceImpl extends BaseService implements IJavaService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(JavaServiceImpl.class);
 
@@ -44,18 +44,18 @@ public class JavaServiceImpl implements IJavaService {
         info.setMaxMemory(Util.bytesToView(r.maxMemory()));
         info.setTotalMemory(Util.bytesToView(r.totalMemory()));*/
 
-        info.setSystemInfo(Cmd.run(CmdStr.SYSTEM_INFO));
-        info.setCpuInfo(Cmd.run(CmdStr.CPU_INFO));
-        info.setMemInfo(Cmd.run(CmdStr.MEM_INFO));
-        info.setSystemDateTime(Cmd.run(CmdStr.DATETIME));
-        info.setSystemStartDateTime(Cmd.run(CmdStr.START_DATETIME));
+        info.setSystemInfo(run(CmdStr.SYSTEM_INFO));
+        info.setCpuInfo(run(CmdStr.CPU_INFO));
+        info.setMemInfo(run(CmdStr.MEM_INFO));
+        info.setSystemDateTime(run(CmdStr.DATETIME));
+        info.setSystemStartDateTime(run(CmdStr.START_DATETIME));
         return info;
     }
 
     @Override
     public List<PsInfoBean> getPsInfos() {
         List<PsInfoBean> ps = new ArrayList<>();
-        String psStr = Cmd.run(CmdStr.PS);
+        String psStr = run(CmdStr.PS);
         if (!StringUtil.isNullOrEmpty(psStr)) {
             String[] psArr = psStr.split(CmdStr.SEPARATOR);
             LOGGER.info("包含java的进程总数：{}", psArr.length);
@@ -80,14 +80,14 @@ public class JavaServiceImpl implements IJavaService {
                         if (comOpt.isPresent()) {
                             info.setCommand(comOpt.get());
                         }
-                        String startTimeStr = Cmd.run(CmdStr.getPsStartTime(info.getPid()));
+                        String startTimeStr = run(CmdStr.getPsStartTime(info.getPid()));
                         if (!StringUtil.isNullOrEmpty(startTimeStr)) {
                             startTimeStr = startTimeStr.replace(info.getPid(), "");
                             startTimeStr = startTimeStr.trim();
                             LOGGER.info("开始时间：{}", startTimeStr);
                             info.setStartTime(DateUtil.dateToStr(DateUtil.getDate(startTimeStr)));
                         }
-                        String liveTimeStr = Cmd.run(CmdStr.getPsLiveTime(info.getPid()));
+                        String liveTimeStr = run(CmdStr.getPsLiveTime(info.getPid()));
                         if (!StringUtil.isNullOrEmpty(liveTimeStr)) {
                             liveTimeStr = liveTimeStr.replace(info.getPid(), "");
                             liveTimeStr = liveTimeStr.trim();
