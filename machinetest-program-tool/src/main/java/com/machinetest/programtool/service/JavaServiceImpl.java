@@ -61,7 +61,7 @@ public class JavaServiceImpl extends BaseService implements IJavaService {
             LOGGER.info("包含java的进程总数：{}", psArr.length);
             for (String p : psArr) {
                 LOGGER.info("进程信息：{}", p);
-                if (p.contains(PS_JAR) || p.contains(PS_TOMCAT)) {
+                if (p.contains(PS_TOMCAT) || p.contains(PS_JAR)) {
                     p = StringUtil.manyBlanksToOne(p);
                     String[] pItems = p.split(" ");
                     LOGGER.info("进程信息：{}", pItems.length);
@@ -78,7 +78,14 @@ public class JavaServiceImpl extends BaseService implements IJavaService {
                         String comKey = p.contains(PS_TOMCAT) ? PS_TOMCAT : PS_JAR;
                         Optional<String> comOpt = Arrays.stream(pItems).filter(i -> i.contains(comKey)).findFirst();
                         if (comOpt.isPresent()) {
-                            info.setCommand(comOpt.get());
+                            String com = comOpt.get();
+                            if (PS_TOMCAT.equals(comKey)) {
+                                com = com.replace(PS_TOMCAT, "");
+                            } else {
+                                String[] coms = com.split("/");
+                                com = coms[coms.length - 1];
+                            }
+                            info.setCommand(com);
                         }
                         String startTimeStr = run(CmdStr.getPsStartTime(info.getPid()));
                         if (!StringUtil.isNullOrEmpty(startTimeStr)) {
@@ -94,6 +101,7 @@ public class JavaServiceImpl extends BaseService implements IJavaService {
                             LOGGER.info("liveTimeStr：{}", liveTimeStr);
                             info.setLiveTime(liveTimeStr);
                         }
+                        info.setThreadCount(run(CmdStr.getPsThreadCount(info.getPid())));
                         ps.add(info);
                     }
                 }

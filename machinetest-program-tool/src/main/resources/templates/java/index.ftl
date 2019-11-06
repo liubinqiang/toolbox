@@ -41,6 +41,7 @@
             <td>固定内存</td>
             <td>状态</td>
             <td>使用CPU运作的时间</td>
+            <td>线程个数</td>
             <td>启动时间</td>
             <td>运行时长</td>
         </tr>
@@ -57,6 +58,7 @@
                 <td>${p.rss}</td>
                 <td>${p.stat}</td>
                 <td>${p.time}</td>
+                <td>${p.threadCount}</td>
                 <td>${p.startTime}</td>
                 <td>${p.liveTime}</td>
             </tr>

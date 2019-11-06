@@ -19,4 +19,6 @@ public class PsInfoBean {
 
     private String startTime;
     private String liveTime;
+
+    private String threadCount;
 }

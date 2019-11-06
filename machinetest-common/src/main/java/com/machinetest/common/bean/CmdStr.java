@@ -19,6 +19,10 @@ public class CmdStr {
     public static final String PS_LIVE_TIME = "ps -eo pid,etime | grep ";
 
 
+    public static String getPsThreadCount(String pid) {
+        return "ps huH p " + pid + " | wc -l";
+    }
+
     public static String getPsStartTime(String pid) {
         return PS_START_TIME + pid;
     }
