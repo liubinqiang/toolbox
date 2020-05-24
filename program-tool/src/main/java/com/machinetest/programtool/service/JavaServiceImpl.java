@@ -1,26 +1,28 @@
 package com.machinetest.programtool.service;
 
 import com.machinetest.common.bean.CmdStr;
-import com.machinetest.common.util.Cmd;
 import com.machinetest.common.util.DateUtil;
 import com.machinetest.common.util.StringUtil;
-import com.machinetest.common.util.Util;
-import com.machinetest.programtool.bean.PropertyKeys;
 import com.machinetest.programtool.bean.PsInfoBean;
 import com.machinetest.programtool.bean.ServerInfoBean;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * @author liubinqiang
  */
+@Slf4j
 @Service
 public class JavaServiceImpl extends BaseService implements IJavaService {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(JavaServiceImpl.class);
 
     private static final String PS_JAR = ".jar";
     private static final String PS_TOMCAT = "-Dcatalina.base=";
@@ -54,59 +56,69 @@ public class JavaServiceImpl extends BaseService implements IJavaService {
 
     @Override
     public List<PsInfoBean> getPsInfos() {
-        List<PsInfoBean> ps = new ArrayList<>();
         String psStr = run(CmdStr.PS);
+        return getPsInfo(psStr);
+    }
+
+    private List<PsInfoBean> getPsInfo(String psStr) {
+        List<PsInfoBean> ps = new ArrayList<>();
         if (!StringUtil.isNullOrEmpty(psStr)) {
             String[] psArr = psStr.split(CmdStr.SEPARATOR);
-            LOGGER.info("包含java的进程总数：{}", psArr.length);
-            for (String p : psArr) {
-                LOGGER.info("进程信息：{}", p);
-                if (p.contains(PS_TOMCAT) || p.contains(PS_JAR)) {
-                    p = StringUtil.manyBlanksToOne(p);
-                    String[] pItems = p.split(" ");
-                    LOGGER.info("进程信息：{}", pItems.length);
-                    if (pItems.length >= 11) {
-                        PsInfoBean info = new PsInfoBean();
-                        info.setUser(pItems[0]);
-                        info.setPid(pItems[1]);
-                        info.setCpu(pItems[2]);
-                        info.setMem(pItems[3]);
-                        info.setVsz(pItems[4]);
-                        info.setRss(pItems[5]);
-                        info.setStat(pItems[7]);
-                        info.setTime(pItems[9]);
-                        String comKey = p.contains(PS_TOMCAT) ? PS_TOMCAT : PS_JAR;
-                        Optional<String> comOpt = Arrays.stream(pItems).filter(i -> i.contains(comKey)).findFirst();
-                        if (comOpt.isPresent()) {
-                            String com = comOpt.get();
-                            if (PS_TOMCAT.equals(comKey)) {
-                                com = com.replace(PS_TOMCAT, "");
-                            } else {
-                                String[] coms = com.split("/");
-                                com = coms[coms.length - 1];
+            log.info("包含java的进程总数：{}", psArr.length);
+            try {
+                for (String p : psArr) {
+                    log.info("进程信息：{}", p);
+                    if (p.contains(PS_TOMCAT) || p.contains(PS_JAR)) {
+                        p = StringUtil.manyBlanksToOne(p);
+                        String[] pItems = p.split(" ");
+                        log.info("进程信息：{}", pItems.length);
+                        if (pItems.length >= 11) {
+                            PsInfoBean info = new PsInfoBean(pItems);
+                            String comKey = p.contains(PS_TOMCAT) ? PS_TOMCAT : PS_JAR;
+                            Optional<String> comOpt = Arrays.stream(pItems).filter(i -> i.contains(comKey)).findFirst();
+                            if (comOpt.isPresent()) {
+                                String com = comOpt.get();
+                                if (PS_TOMCAT.equals(comKey)) {
+                                    com = com.replace(PS_TOMCAT, "");
+                                } else {
+                                    String[] coms = com.split("/");
+                                    com = coms[coms.length - 1];
+                                }
+                                info.setCommand(com);
                             }
-                            info.setCommand(com);
+                            info.setStartTime(getStartTime(info.getPid()));
+                            info.setLiveTime(getLiveTime(info.getPid()));
+                            info.setThreadCount(run(CmdStr.getPsThreadCount(info.getPid())));
+                            ps.add(info);
                         }
-                        String startTimeStr = run(CmdStr.getPsStartTime(info.getPid()));
-                        if (!StringUtil.isNullOrEmpty(startTimeStr)) {
-                            startTimeStr = startTimeStr.replace(info.getPid(), "");
-                            startTimeStr = startTimeStr.trim();
-                            LOGGER.info("开始时间：{}", startTimeStr);
-                            info.setStartTime(DateUtil.dateToStr(DateUtil.getDate(startTimeStr)));
-                        }
-                        String liveTimeStr = run(CmdStr.getPsLiveTime(info.getPid()));
-                        if (!StringUtil.isNullOrEmpty(liveTimeStr)) {
-                            liveTimeStr = liveTimeStr.replace(info.getPid(), "");
-                            liveTimeStr = liveTimeStr.trim();
-                            LOGGER.info("liveTimeStr：{}", liveTimeStr);
-                            info.setLiveTime(liveTimeStr);
-                        }
-                        info.setThreadCount(run(CmdStr.getPsThreadCount(info.getPid())));
-                        ps.add(info);
                     }
                 }
+            } catch (Exception ex) {
+                log.error("读取线程信息报错：", ex);
             }
         }
         return ps;
     }
+
+    private String getLiveTime(String pid) {
+        String liveTimeStr = run(CmdStr.getPsLiveTime(pid));
+        if (!StringUtil.isNullOrEmpty(liveTimeStr)) {
+            liveTimeStr = liveTimeStr.replace(pid, "");
+            liveTimeStr = liveTimeStr.trim();
+            log.info("liveTimeStr：{}", liveTimeStr);
+        }
+        return liveTimeStr;
+    }
+
+    private String getStartTime(String pid) {
+        String startTimeStr = run(CmdStr.getPsStartTime(pid));
+        log.info("获取开始时间：{}", startTimeStr);
+        if (!StringUtil.isNullOrEmpty(startTimeStr)) {
+            startTimeStr = startTimeStr.replace(pid, "");
+            startTimeStr = startTimeStr.trim();
+        }
+        log.info("处理后开始时间：{}", startTimeStr);
+        return startTimeStr;
+    }
+
 }

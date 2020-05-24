@@ -7,6 +7,20 @@ import lombok.Data;
  */
 @Data
 public class PsInfoBean {
+    public PsInfoBean() {
+    }
+
+    public PsInfoBean(String[] pItems) {
+        this.user = pItems[0];
+        this.pid = pItems[1];
+        this.cpu = pItems[2];
+        this.mem = pItems[3];
+        this.vsz = pItems[4];
+        this.rss = pItems[5];
+        this.stat = pItems[7];
+        this.time = pItems[9];
+    }
+
     private String user;
     private String pid;
     private String cpu;
