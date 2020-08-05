@@ -1,4 +1,4 @@
-package com.machinetest.common.bean;
+package com.machinetest.programtool.bean;
 
 /**
  * @author liubinqiang

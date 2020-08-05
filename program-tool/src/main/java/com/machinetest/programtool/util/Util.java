@@ -1,4 +1,4 @@
-package com.machinetest.common.util;
+package com.machinetest.programtool.util;
 
 import java.net.URLDecoder;
 import java.net.URLEncoder;

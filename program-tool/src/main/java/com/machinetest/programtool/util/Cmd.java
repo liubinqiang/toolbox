@@ -1,6 +1,7 @@
-package com.machinetest.common.util;
+package com.machinetest.programtool.util;
 
-import com.machinetest.common.bean.CmdStr;
+
+import com.machinetest.programtool.bean.CmdStr;
 
 import java.io.BufferedReader;
 import java.io.IOException;

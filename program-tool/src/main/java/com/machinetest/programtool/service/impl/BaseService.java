@@ -1,6 +1,6 @@
-package com.machinetest.programtool.service;
+package com.machinetest.programtool.service.impl;
 
-import com.machinetest.common.util.Cmd;
+import com.machinetest.programtool.util.Cmd;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
