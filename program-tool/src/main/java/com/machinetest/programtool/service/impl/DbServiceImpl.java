@@ -22,10 +22,10 @@ public class DbServiceImpl implements IDbService {
 
     @Override
     public void syncDefaultValue() {
-        List<MysqlTable> mysqlTableList = mysqlDbService.getTableListByDbName("rx_v_1_3_2501");
+        List<MysqlTable> mysqlTableList = mysqlDbService.getTableListByDbName("demo");
         for (MysqlTable mysqlTable : mysqlTableList) {
             oracleDbService.updateTableComment(mysqlTable.getTableName().toUpperCase(), mysqlTable.getTableComment());
-            List<MysqlColumn> mysqlColumnList = mysqlDbService.getColumnListByTableName("rx_v_1_3_2501", mysqlTable.getTableName());
+            List<MysqlColumn> mysqlColumnList = mysqlDbService.getColumnListByTableName("demo", mysqlTable.getTableName());
             for (MysqlColumn mysqlColumn : mysqlColumnList) {
                 oracleDbService.updateColumnComment(mysqlTable.getTableName().toUpperCase(), mysqlColumn.getColumnName().toUpperCase(), mysqlColumn.getColumnComment());
                 if (mysqlColumn.getColumnDefault() != null && mysqlColumn.getColumnDefault().length() > 0) {
