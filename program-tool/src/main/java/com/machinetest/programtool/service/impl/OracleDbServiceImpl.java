@@ -24,7 +24,7 @@ import java.util.regex.Pattern;
 @Service
 public class OracleDbServiceImpl implements IOracleDbService {
 
-    private static final String DB_URL = "jdbc:oracle:thin:@192.168.1.5:1521:orcl";
+    private static final String DB_URL = "jdbc:oracle:thin:@192.168.0.2:1521:demo";
     private static final String DB_USER = "demo";
     private static final String DB_PWD = "demo";
 

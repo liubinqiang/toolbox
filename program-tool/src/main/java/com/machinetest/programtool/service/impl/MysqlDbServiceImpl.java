@@ -17,7 +17,7 @@ import java.util.List;
 @Service
 public class MysqlDbServiceImpl implements IMysqlDbService {
 
-    private static final String DB_URL = "jdbc:mysql://192.168.1.5:3306/demo?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false&autoReconnect=true&failOverReadOnly=false&serverTimezone=Asia/Shanghai&user=root&password=root";
+    private static final String DB_URL = "jdbc:mysql://192.168.0.1:3306/demo?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false&autoReconnect=true&failOverReadOnly=false&serverTimezone=Asia/Shanghai&user=root&password=demo";
 
     private <T> List<T> queryDb(Class<T> tClass, String sql) {
         List<T> list = new ArrayList<>();

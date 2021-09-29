@@ -1,5 +1,6 @@
 package com.machinetest.programtool;
 
+import com.machinetest.programtool.service.IDbService;
 import com.machinetest.programtool.service.IJavaService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,14 +19,23 @@ import java.net.UnknownHostException;
 @SpringBootTest
 public class ProgramToolApplicationTests {
 
+    /*    @Autowired
+        AnnotationConfigApplicationContext annotationConfigApplicationContext;*/
     @Autowired
-    AnnotationConfigApplicationContext annotationConfigApplicationContext;
+    private IDbService dbService;
 
     @Test
     public void contextLoads() {
 
-        IJavaService javaService = annotationConfigApplicationContext.getBean(IJavaService.class);
-        System.out.println(javaService.getClass().getName());
+/*        IJavaService javaService = annotationConfigApplicationContext.getBean(IJavaService.class);
+        System.out.println(javaService.getClass().getName());*/
     }
+
+    @Test
+    public void sync() {
+        dbService.syncDefaultValue();
+    }
+
+
 
 }
