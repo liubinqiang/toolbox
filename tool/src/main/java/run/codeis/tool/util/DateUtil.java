@@ -1,4 +1,4 @@
-package com.machinetest.programtool.util;
+package run.codeis.tool.util;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

@@ -5,11 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.machinetest</groupId>
-    <artifactId>program-tool-parent</artifactId>
+    <artifactId>tool-parent</artifactId>
     <packaging>pom</packaging>
     <version>1.0.0</version>
     <modules>
-        <module>program-tool</module>
+        <module>tool</module>
     </modules>
     <build>
         <plugins>

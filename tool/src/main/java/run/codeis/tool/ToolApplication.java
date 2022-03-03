@@ -1,13 +1,13 @@
-package com.machinetest.programtool;
+package run.codeis.tool;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ProgramToolApplication {
+public class ToolApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(ProgramToolApplication.class, args);
+        SpringApplication.run(ToolApplication.class, args);
     }
 
 }

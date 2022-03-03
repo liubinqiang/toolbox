@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.machinetest</groupId>
-    <artifactId>program-tool</artifactId>
+    <artifactId>tool</artifactId>
     <version>1.0.0</version>
-    <name>program-tool</name>
-    <description>program tool</description>
+    <name>tool</name>
+    <description>tool</description>
 
     <properties>
         <java.version>1.8</java.version>
