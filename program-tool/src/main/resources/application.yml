@@ -4,7 +4,7 @@ server:
 spring:
   freemarker:
     cache: false
-  security:
-    user:
-      name: admin
-      password: admin
+#  security:
+#    user:
+#      name: admin
+#      password: admin
